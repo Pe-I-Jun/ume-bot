@@ -21,7 +21,7 @@ var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
 //=========================================================
-// Bots Dialogs
+// Bots Dialogs setup
 //=========================================================
 
 bot .dialog('/', function (session) {
