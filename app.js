@@ -64,7 +64,7 @@ bot.dialog('/', intents);
 intents
     .matches('コーヒー全般', function (session, args) {
 
-       session.send("コーヒー？" + botenv );
+       session.send("コーヒーについてよく知りたい？？"  );
     })
     .matches('None', function (session, args) {
 
