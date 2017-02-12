@@ -26,7 +26,8 @@ server.post('/api/messages', connector.listen());
 //LUIS Setup
 //=========================================================
 var url = process.env.LUIS_MODEL_URL;
-var dialog = new builder.LuisDialog(url);
+// 認識に指定するLUIS APIのURLを指定
+var recognizer = new builder.LuisRecognizer(url);
 
 
 //=========================================================
@@ -40,33 +41,33 @@ bot .dialog('/', function (session) {
 });
 */
 
-bot.add('/', dialog);
+//=========================================================
+// IntentDialogオブジェクトの用意
+//=========================================================
 
-// Intent="what_day"の場合の処理
-dialog.on('what_day', function(session, args) {
-console.log('message:');
-console.log(session.message);
 
-var date = builder.EntityRecognizer.findEntity(args.entities, 'builtin.datetime.date');
-console.log('date:');
-console.log(date);
 
-if (date != undefined && date.resolution != undefined) {
-var d = new Date(date.resolution.date);
-var day = '日月火水木金土'[d.getDay()];
-session.send('その日は「' + day + '曜日」です。');
-} else {
-session.send('日付を取得できませんでした。');
-}
+// IntentDialogオブジェクトを作成
+var intents = new builder.IntentDialog({
+  recognizers: [recognizer]
 });
 
-// Intent="None"の場合の処理
-dialog.onDefault(function(session, args) {
-console.log('args:');
-console.log(args);
 
-console.log('message:');
-console.log(session.message);
+//=========================================================
+// 会話の処理
+//=========================================================
 
-session.send("質問を理解できませんでした。もう一度、少し表現を変えて質問してみてください。")
-});
+// 初期ダイアログを、intentDialogとして使用する
+bot.dialog('/', intents);
+
+// インテントと処理の結びつけ
+intents
+    .matches('コーヒー全般', function (session, args) {
+
+       session.send("コーヒー？" + botenv );
+    })
+    .matches('None', function (session, args) {
+
+       session.send("よくわからん" );
+
+    })
