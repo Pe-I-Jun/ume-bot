@@ -20,16 +20,8 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 
-
-
 //=========================================================
-//LUIS Setup
-//=========================================================
-var url = process.env.LUIS_MODEL_URL;
-var dialog = new builder.LuisDialog(url);
-
-//=========================================================
-// Bots Dialogs
+// Bots Dialogs setup
 //=========================================================
 
 bot .dialog('/', function (session) {
